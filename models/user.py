@@ -12,3 +12,10 @@ class User(Base):
     phone_number = Column(String(20))
     created_at = Column(DateTime, default=datetime.utcnow)
     bookings = relationship("Booking", back_populates="user")
+    reset_token = Column(String(100), nullable=True)
+    token_expiration = Column(DateTime, nullable=True)
+    def __repr__(self):
+        return f"<User(id={self.id}, email={self.email})>"
+    contact_messages = relationship("ContactMessage", back_populates="user")
+    
+
