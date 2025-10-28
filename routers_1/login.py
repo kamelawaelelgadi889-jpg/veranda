@@ -6,10 +6,8 @@ from sqlalchemy.orm import Session
 from models.user import User
 import hashlib
 from fastapi import Depends
+from schemas import loginInput
 router = APIRouter()
-class loginInput(BaseModel):
-    email: emailstr
-    password: str
 
 
 def get_db():

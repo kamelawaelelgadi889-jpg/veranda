@@ -11,5 +11,7 @@ class Place(Base):
     location = Column(String(100), nullable=True)
 
     bookings = relationship("Booking", back_populates="place")
+    images = relationship("Image", back_populates="place", cascade="all, delete")
+
 
  

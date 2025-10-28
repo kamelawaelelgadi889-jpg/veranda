@@ -4,15 +4,11 @@ from database import SessionLocal
 from models.user import User  # SQLAlchemy model
 from pydantic import BaseModel, EmailStr
 import hashlib
+from schemas import UserInput
 
 router = APIRouter()
 
-# Pydantic schema for input
-class UserInput(BaseModel):
-    full_name: str
-    email: EmailStr
-    password: str
-    phone_number: str
+
 
 # DB session dependency
 def get_db():

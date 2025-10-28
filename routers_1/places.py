@@ -5,13 +5,10 @@ from models.place import Place
 from pydantic import BaseModel
 from typing import List
 from models.place import Place as PlaceSchema
-
+from schemas import PlaceInput
 router = APIRouter()
 
-class PlaceInput(BaseModel):
-    name: str
-    description: str | None = None
-    location: str | None = None
+
 
 def get_db():
     db = SessionLocal()

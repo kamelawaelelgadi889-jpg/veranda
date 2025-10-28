@@ -6,16 +6,13 @@ from database import get_db
 from datetime import datetime, timedelta
 from typing import Optional
 import secrets
+from schemas import EmailRequest
 
 from routers_1.reset_password import ResetRequest
 
 router = APIRouter()
 
-class EmailRequest(BaseModel):
-    email: str
-    #هادلا لو نبي ندير تغيير كلمة المرور حتي ب رقم هاتف لاكن لازم يبي حاجات تانية ف ممكن نديرها في الاخير 
-    #email : Optional[str] = None
-   # phone_number : Optional[str] = None
+
 
 @router.post("/forgot-password")
 def forgot_password(request: ResetRequest, db: Session = Depends(get_db)):

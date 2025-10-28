@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 from database import get_db
 from datetime import datetime
 import hashlib
+from schemas import ResetRequest
 
 router = APIRouter()
 
-class ResetRequest(BaseModel):
-    new_password: str
+
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()

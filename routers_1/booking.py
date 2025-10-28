@@ -6,17 +6,11 @@ from database import SessionLocal
 from models.Booking import Booking
 from decimal import Decimal
 from datetime import date
+from schemas import BookingInput
 
 router = APIRouter()
 
-# نموذج الإدخال بدون status
-class BookingInput(BaseModel):
-    user_id: int
-    place_id: int
-    check_in: date
-    check_out: date
-    guests: int
-    total_price: Decimal
+
 
 # دالة الاتصال بقاعدة البيانات
 def get_db():
