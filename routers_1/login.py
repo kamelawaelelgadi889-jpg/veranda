@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
-from pydantic import EmailStr as emailstr
+from pydantic import EmailStr as EmailStr
 from database import SessionLocal
 from sqlalchemy.orm import Session
 from models.user import User

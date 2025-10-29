@@ -1,12 +1,12 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from datetime import date
+from datetime import date , datetime
 from decimal import Decimal
 
 
 
 # نموذج الإدخال لنموذج الاتصال
-class ConactInput(BaseModel): 
+class ContactInput(BaseModel): 
     full_name: str 
     email: EmailStr
     phone_number: str
@@ -20,11 +20,21 @@ class BookingInput(BaseModel):
     check_in: date
     check_out: date
     guests: int
-    total_price: Decimal
+# نموذج الإخراج للحجز
 
+class BookingOut(BaseModel):
+    id: int
+    user_id: int
+    place_id: int
+    price: float
+    status: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
 # نموذج طلب إعادة تعيين كلمة المرور
 class EmailRequest(BaseModel):
-    email: str
+    email: EmailStr
     #هادلا لو نبي ندير تغيير كلمة المرور حتي ب رقم هاتف لاكن لازم يبي حاجات تانية ف ممكن نديرها في الاخير 
     #email : Optional[str] = None
     # phone_number : Optional[str] = None
@@ -35,10 +45,24 @@ class loginInput(BaseModel):
     password: str
 
 # نموذج الإدخال لإضافة مكان
-class PlaceInput(BaseModel):
+class PlaceCreate(BaseModel):
     name: str
-    description: str | None = None
-    location: str | None = None
+    description: Optional[str] = ""
+    location: Optional[str] = ""
+    price: float = 0.0
+    type: Optional[str] = None
+
+class PlaceOut(BaseModel):
+    id: int
+    name: str
+    description: Optional[str]
+    location: Optional[str]
+    price: float
+    type: Optional[str]
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
 
 # نموذج الإدخال لتسجيل المستخدم
 class UserInput(BaseModel):
@@ -54,3 +78,24 @@ class ResetRequest(BaseModel):
 class ImageInput(BaseModel):
     place_id: int
     image_url: str
+
+#ادخال التقيمات 
+class ReviewCreate(BaseModel):
+    user_id: int
+    place_id: int
+    rating: int
+    comment: Optional[str] = ""
+
+
+#
+    class ReviewOut(BaseModel):
+        id: int
+        user_id: int
+        place_id: int
+        rating: int
+        comment: Optional[str] 
+        created_at: datetime
+        class Config:
+            orm_mode = True
+
+

@@ -1,54 +1,44 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from pydantic import BaseModel
-from sqlalchemy import Engine
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.Booking import Booking
-from decimal import Decimal
-from datetime import date
-from schemas import BookingInput
+from database import get_db
+from models import Booking
+from models.place import Place
+from datetime import datetime
 
 router = APIRouter()
 
+@router.post("/bookings")
+def create_booking(
+    user_id: int = Form(...),
+    place_id: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    # نجيب المكان من قاعدة البيانات
+    place = db.query(Place).filter(Place.id == place_id).first()
+    if not place:
+        raise HTTPException(status_code=404, detail="المكان غير موجود")
 
-
-# دالة الاتصال بقاعدة البيانات
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# راوتر الحجز
-@router.post("/booking")
-def booking(booking: BookingInput, db: Session = Depends(get_db)):
-    new_booking = Booking(
-        user_id=booking.user_id,
-        place_id=booking.place_id,
-        check_in=booking.check_in,
-        check_out=booking.check_out,
-        guests=booking.guests,
-        total_price=booking.total_price,
-        status="pending"  # ← الحالة تبدأ تلقائيًا بـ pending
+    # نستخدم السعر من المكان
+    booking = Booking(
+        user_id=user_id,
+        place_id=place_id,
+        price=place.price,
+        status="pending",
+        created_at=datetime.utcnow()
     )
-    db.add(new_booking)
+
+    db.add(booking)
     db.commit()
-    db.refresh(new_booking)
+    db.refresh(booking)
+
     return {
-        "message": "تم إرسال الحجز، في انتظار موافقة الإدارة ✅",
+        "message": "تم إنشاء الحجز",
         "booking": {
-            "id": new_booking.id,
-            "user_id": new_booking.user_id,
-            "place_id": new_booking.place_id,
-            "check_in": new_booking.check_in,
-            "check_out": new_booking.check_out,
-            "guests": new_booking.guests,
-            "total_price": new_booking.total_price,
-            "status": new_booking.status
+            "id": booking.id,
+            "user_id": booking.user_id,
+            "place_id": booking.place_id,
+            "price": booking.price,
+            "status": booking.status,
+            "created_at": str(booking.created_at)
         }
     }
-
-
-print("✅ راوتر الحجز تم تحميله بنجاح")
-

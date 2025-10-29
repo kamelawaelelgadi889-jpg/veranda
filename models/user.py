@@ -17,5 +17,6 @@ class User(Base):
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"
     contact_messages = relationship("ContactMessage", back_populates="user")
+    reviews = relationship("Review", back_populates="user")
     
 

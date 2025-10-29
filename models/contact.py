@@ -1,8 +1,9 @@
-from click import DateTime
+#from click import DateTime
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
+from sqlalchemy import DateTime
 
 class ContactMessage(Base):
     __tablename__ = "contact_messages"

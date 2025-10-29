@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers_1 import register,login,image
+from routers_1 import register,login,image,review
 from routers_1 import booking ,places,calendar,forgot_password,reset_password,contact
 from sqlalchemy import text
 from database import SessionLocal
@@ -18,6 +18,7 @@ app.include_router(forgot_password.router)
 app.include_router(reset_password.router)
 app.include_router(contact.router)
 app.include_router(image.router)
+app.include_router(review.router)
  
 from fastapi.middleware.cors import CORSMiddleware
 

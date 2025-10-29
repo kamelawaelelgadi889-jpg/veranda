@@ -1,51 +1,32 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from models.place import Place
-from pydantic import BaseModel
-from typing import List
-from models.place import Place as PlaceSchema
-from schemas import PlaceInput
+from schemas import PlaceOut
+from datetime import datetime
+
 router = APIRouter()
 
+@router.post("/places", response_model=PlaceOut)
+def create_place(
+    name: str = Form(...),
+    description: str = Form(""),
+    location: str = Form(""),
+    price: float = Form(0.0),
+    type: str = Form(None),
+    db: Session = Depends(get_db)
+):
+    place = Place(
+        name=name,
+        description=description,
+        location=location,
+        price=price,
+        type=type,
+        created_at=datetime.utcnow()
+    )
 
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@router.post("/places")
-def create_place(data: PlaceInput, db: Session = Depends(get_db)):
-    new_place = Place(**data.dict())
-    db.add(new_place)
+    db.add(place)
     db.commit()
-    db.refresh(new_place)
-    return {
-        "message": "✅ تم إضافة المكان",
-        "place": {
-            "id": new_place.id,
-            "name": new_place.name,
-            "location": new_place.location
-        }
-    }
+    db.refresh(place)
 
-@router.get("/places")
-def get_places(db: Session = Depends(get_db)):
-    places = db.query(Place).all()
-    return places
-print("راوتر الأماكن تم تحميله")
-class PlaceSchema(BaseModel):
-    id: int
-    name: str
-    description: str | None = None
-    location: str | None = None
-
-    class Config:
-        orm_mode = True
-
-@router.get("/places", response_model=List[PlaceSchema])
-def get_all_places(db: Session = Depends(get_db)):
-    return db.query(Place).all()
+    return place
