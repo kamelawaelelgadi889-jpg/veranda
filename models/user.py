@@ -18,5 +18,6 @@ class User(Base):
         return f"<User(id={self.id}, email={self.email})>"
     contact_messages = relationship("ContactMessage", back_populates="user")
     reviews = relationship("Review", back_populates="user")
+    role = Column(String, nullable=False, default="user")
     
 

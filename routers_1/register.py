@@ -1,3 +1,4 @@
+from datetime import date
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from database import SessionLocal
@@ -43,7 +44,10 @@ def register(user: UserInput, db: Session = Depends(get_db)):
         full_name=user.full_name,
         email=user.email,
         password_hash=hashed_password,
-        phone_number=user.phone_number
+        phone_number=user.phone_number,
+        
+        role=getattr(user, "role", "user")
+
     )
 
     # حفظ في قاعدة البيانات
@@ -60,3 +64,4 @@ def register(user: UserInput, db: Session = Depends(get_db)):
             "phone_number": new_user.phone_number
         }
     }
+

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
 from datetime import date , datetime
 from decimal import Decimal
@@ -14,12 +14,13 @@ class ContactInput(BaseModel):
     user_id: Optional[int] = None
 
 #  نموذج الإدخال للحجز
-class BookingInput(BaseModel):
+class BookingCreate(BaseModel):
     user_id: int
     place_id: int
+    guests: int
     check_in: date
     check_out: date
-    guests: int
+
 # نموذج الإخراج للحجز
 
 class BookingOut(BaseModel):
@@ -28,16 +29,17 @@ class BookingOut(BaseModel):
     place_id: int
     price: float
     status: str
+    guests: int
+    check_in: date
+    check_out: date
     created_at: datetime
 
     class Config:
         orm_mode = True
+
 # نموذج طلب إعادة تعيين كلمة المرور
 class EmailRequest(BaseModel):
     email: EmailStr
-    #هادلا لو نبي ندير تغيير كلمة المرور حتي ب رقم هاتف لاكن لازم يبي حاجات تانية ف ممكن نديرها في الاخير 
-    #email : Optional[str] = None
-    # phone_number : Optional[str] = None
 
 # نموذج الإدخال لتسجيل الدخول
 class loginInput(BaseModel):
@@ -70,32 +72,34 @@ class UserInput(BaseModel):
     email: EmailStr
     password: str
     phone_number: str
+    role: Optional[str] = "user"
 
-# نموذج طلب إعادة تعيين كلمة المرور
-class ResetRequest(BaseModel):
+    
+# نموذج طلب إعادة تعيين كلمة المرور (إعادة التعيين باستخدام توكن أو رابط)
+class ForgotPasswordRequest(BaseModel):
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+
+class ResetPasswordRequest(BaseModel):
     new_password: str
 
-class ImageInput(BaseModel):
-    place_id: int
-    image_url: str
+# ادخال التقيمات 
 
-#ادخال التقيمات 
 class ReviewCreate(BaseModel):
     user_id: int
     place_id: int
     rating: int
     comment: Optional[str] = ""
 
+class ReviewOut(BaseModel):
+    id: int
+    user_id: int
+    place_id: int
+    rating: int
+    comment: Optional[str]
+    created_at: datetime
 
-#
-    class ReviewOut(BaseModel):
-        id: int
-        user_id: int
-        place_id: int
-        rating: int
-        comment: Optional[str] 
-        created_at: datetime
-        class Config:
-            orm_mode = True
+    class Config:
+        orm_mode = True
 
 

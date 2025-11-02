@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from models.Booking import Booking
+from models.booking import Booking
 from datetime import timedelta
 
 router = APIRouter()
