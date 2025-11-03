@@ -66,6 +66,10 @@ class PlaceOut(BaseModel):
     class Config:
         orm_mode = True
 
+#حدف الاماكن
+class PlaceDelete(BaseModel):
+    id: int
+
 # نموذج الإدخال لتسجيل المستخدم
 class UserInput(BaseModel):
     full_name: str
@@ -103,3 +107,11 @@ class ReviewOut(BaseModel):
         orm_mode = True
 
 
+#لحالة الحجز
+class booking_status_update(BaseModel):
+    status: str
+
+
+class imageCreate(BaseModel):
+    place_id: int
+    image_url: str

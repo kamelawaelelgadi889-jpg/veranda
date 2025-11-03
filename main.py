@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routers_1 import register,login,image,review,dashboard
-from routers_1 import booking ,places,calendar,forgot_password,reset_password,contact
+from routers_1 import register,login,image,review,dashboard,booking_status
+from routers_1 import booking ,places,calendar,forgot_password,reset_password,contact,places_d
 from sqlalchemy import text
 from database import SessionLocal
 from auth import get_admin_user
@@ -21,6 +21,8 @@ app.include_router(contact.router)
 app.include_router(image.router)
 app.include_router(review.router)
 app.include_router(dashboard.router)
+app.include_router(places_d.router)
+app.include_router(booking_status.router)
 
 
  

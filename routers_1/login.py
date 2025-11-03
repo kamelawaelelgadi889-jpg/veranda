@@ -7,12 +7,13 @@ import hashlib
 from jose import jwt
 from datetime import datetime, timedelta
 
-router = APIRouter()
-
 # إعدادات التوكن
-SECRET_KEY = "your-secret-key"  # غيريه في الإنتاج
+SECRET_KEY = "your-secret-key"  # غيّره في بيئة الإنتاج
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ADMIN_ROLE = "admin"
+
+router = APIRouter()
 
 # دالة توليد التوكن
 def create_access_token(data: dict, expires_delta: timedelta = None):
@@ -48,22 +49,36 @@ def login(credentials: loginInput, db: Session = Depends(get_db)):
             detail="الإيميل أو كلمة السر غير صحيحة"
         )
 
-    # توليد التوكن
-    access_token = create_access_token(
-        data={"sub": str(user.id)},
-        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
-
-    # الرد النهائي
-    return {
-        "message": "تم تسجيل الدخول بنجاح ✅",
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": {
-            "id": user.id,
-            "full_name": user.full_name,
-            "email": user.email,
-            "phone_number": user.phone_number,
-            "role": user.role
+    # التحقق من الدور
+    if user.role == ADMIN_ROLE:
+        # توليد التوكن للمسؤول
+        access_token = create_access_token(
+            data={"sub": str(user.id)},
+            expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        )
+        return {
+            "message": "تم تسجيل الدخول كمشرف ✅",
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "id": user.id,
+                "full_name": user.full_name,
+                "email": user.email,
+                "phone_number": user.phone_number,
+                "role": user.role
+            }
         }
-    }
+    else:
+        # تسجيل دخول عادي بدون توكن
+        return {
+            "message": "تم تسجيل الدخول كمستخدم عادي ✅",
+            "access_token": None,
+            "token_type": None,
+            "user": {
+                "id": user.id,
+                "full_name": user.full_name,
+                "email": user.email,
+                "phone_number": user.phone_number,
+                "role": user.role
+            }
+        }

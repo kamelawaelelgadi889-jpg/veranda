@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Depends, Form, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
 from models.place import Place
 from schemas import PlaceOut
 from datetime import datetime
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
 
 router = APIRouter()
 
-@router.post("/places", response_model=PlaceOut)
+@router.post("/places")
 def create_place(
     name: str = Form(...),
     description: str = Form(""),
@@ -24,6 +26,7 @@ def create_place(
         type=type,
         created_at=datetime.utcnow()
     )
+    
 
     db.add(place)
     db.commit()
