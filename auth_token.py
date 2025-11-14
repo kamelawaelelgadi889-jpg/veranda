@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from jose import jwt
 
-#مفتاح التشفير)
+#مفتاح التشفير
 SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60

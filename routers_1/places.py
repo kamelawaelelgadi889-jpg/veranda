@@ -4,18 +4,18 @@ from database import get_db
 from models.place import Place
 from schemas import PlaceOut
 from datetime import datetime
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
 
 router = APIRouter()
 
-@router.post("/places")
+@router.post("/places", response_model=PlaceOut)
 def create_place(
     name: str = Form(...),
     description: str = Form(""),
     location: str = Form(""),
     price: float = Form(0.0),
     type: str = Form(None),
+    number_of_rooms: int = Form(...),
+    room_capacity: int = Form(...),
     db: Session = Depends(get_db)
 ):
     place = Place(
@@ -24,9 +24,10 @@ def create_place(
         location=location,
         price=price,
         type=type,
+        number_of_rooms=number_of_rooms,
+        room_capacity=room_capacity,
         created_at=datetime.utcnow()
     )
-    
 
     db.add(place)
     db.commit()

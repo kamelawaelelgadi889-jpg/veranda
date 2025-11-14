@@ -41,10 +41,10 @@ def register(user: UserInput, db: Session = Depends(get_db)):
 
     # إنشاء مستخدم جديد
     new_user = User(
-        full_name=user.full_name,
+        username=user.username,
         email=user.email,
         password_hash=hashed_password,
-        phone_number=user.phone_number,
+       # phone_number=user.phone_number,
         
         role=getattr(user, "role", "user")
 
@@ -56,12 +56,12 @@ def register(user: UserInput, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return {
-        "message": "تم تسجيل المستخدم بنجاح 🎉",
+        "message": "تم تسجيل المستخدم بنجاح ",
         "user": {
             "id": new_user.id,
-            "full_name": new_user.full_name,
+            "username": new_user.username,
             "email": new_user.email,
-            "phone_number": new_user.phone_number
+            #"phone_number": new_user.phone_number
         }
     }
 

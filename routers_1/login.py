@@ -57,7 +57,7 @@ def login(credentials: loginInput, db: Session = Depends(get_db)):
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         )
         return {
-            "message": "تم تسجيل الدخول كمشرف ✅",
+            "message": "تم تسجيل الدخول كمشرف ",
             "access_token": access_token,
             "token_type": "bearer",
             "user": {
@@ -71,14 +71,14 @@ def login(credentials: loginInput, db: Session = Depends(get_db)):
     else:
         # تسجيل دخول عادي بدون توكن
         return {
-            "message": "تم تسجيل الدخول كمستخدم عادي ✅",
+            "message": "تم تسجيل الدخول ",
             "access_token": None,
             "token_type": None,
             "user": {
                 "id": user.id,
-                "full_name": user.full_name,
+                "username": user.username,
                 "email": user.email,
-                "phone_number": user.phone_number,
-                "role": user.role
+               # "phone_number": user.phone_number,
+                #"role": user.role
             }
         }

@@ -9,17 +9,18 @@ from decimal import Decimal
 class ContactInput(BaseModel): 
     full_name: str 
     email: EmailStr
-    phone_number: str
+   # phone_number: str
     message: str
-    user_id: Optional[int] = None
+  #  user_id: Optional[int] = None
 
 #  نموذج الإدخال للحجز
 class BookingCreate(BaseModel):
-    user_id: int
-    place_id: int
-    guests: int
-    check_in: date
-    check_out: date
+    full_name: str
+    email: str
+    phone_number: str
+    notes: str | None = None
+    check_in: datetime
+    check_out: datetime
 
 # نموذج الإخراج للحجز
 
@@ -29,7 +30,7 @@ class BookingOut(BaseModel):
     place_id: int
     price: float
     status: str
-    guests: int
+    #guests: int
     check_in: date
     check_out: date
     created_at: datetime
@@ -49,22 +50,22 @@ class loginInput(BaseModel):
 # نموذج الإدخال لإضافة مكان
 class PlaceCreate(BaseModel):
     name: str
-    description: Optional[str] = ""
-    location: Optional[str] = ""
-    price: float = 0.0
-    type: Optional[str] = None
-
-class PlaceOut(BaseModel):
-    id: int
-    name: str
     description: Optional[str]
     location: Optional[str]
     price: float
     type: Optional[str]
-    created_at: datetime
+    number_of_rooms: int
+    room_capacity: int
 
+
+class PlaceOut(BaseModel):
+    id: int
+    created_at: datetime
     class Config:
         orm_mode = True
+
+
+
 
 #حدف الاماكن
 class PlaceDelete(BaseModel):
@@ -72,11 +73,11 @@ class PlaceDelete(BaseModel):
 
 # نموذج الإدخال لتسجيل المستخدم
 class UserInput(BaseModel):
-    full_name: str
+    username: str
     email: EmailStr
     password: str
-    phone_number: str
-    role: Optional[str] = "user"
+    #phone_number: str
+    #role: Optional[str] = "user"
 
     
 # نموذج طلب إعادة تعيين كلمة المرور (إعادة التعيين باستخدام توكن أو رابط)
@@ -108,6 +109,7 @@ class ReviewOut(BaseModel):
 
 
 #لحالة الحجز
+#حاله الحجز في الداش بورد مش نعدل عليها بروحي 
 class booking_status_update(BaseModel):
     status: str
 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Form, HTTPException, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from models.booking import Booking
-
+#نغير في حاله  الs tsatus
 router = APIRouter()
 @router.put("/booking/{booking_id}/status")
 def update_booking_status(

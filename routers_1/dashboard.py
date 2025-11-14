@@ -5,4 +5,5 @@ router = APIRouter()
 
 @router.get("/dashboard")
 def get_dashboard(user_id: str = Depends(get_current_user)):
-    return {"message": f"أهلاً بك يا مستخدم رقم {user_id} 👋"}
+    return {"message": f"تم تسجيل الدخول كمسؤول "}
+    
